@@ -8,11 +8,11 @@ They are a construct that helps your organize your code.
 Let's work with some employees at a company.
 You work for Widget Co.  They have hundreds of employees.
 Make a class to help us build all of the employees.
-Each employee has:
-- first_name
-- last_name
-- email
-- age
+// Each employee has:
+// - first_name
+// - last_name
+// - email
+// - age
 
 Each employee can:
 - makeWidget
@@ -21,6 +21,18 @@ Each employee can:
 
 call your class Employee and receive all the data in the constructor in the order listed
 */
+
+class Employee{
+    constructor(first_name,last_name,email,age){
+        this.first_name= first_name;
+        this.last_name= last_name;
+        this.email=email;
+        this.age=age;
+    }
+    makeWidget(){
+        return `${this.first_name} ${this.last_name} Widget`;
+    }
+}
 
 
 
@@ -40,6 +52,22 @@ They can (methods) :
 call your class Manager
 
 */
+//extends just inherided makeWidget(){
+    //     return `${this.first_name} ${this.last_name} Widget`;
+    // }
+class Manager extends Employee{
+    constructor(first_name,last_name,email,age, reports){
+        //super:you get properties from employees
+        super(first_name,last_name,email,age) //this invokes the employee constructor ex: firs,last,name.
+        this.reports=[]; 
+    }
+    hire(employee) {
+        this.reports.push(employee);
+    }
+    fire(index){
+        this.reports.splice(index, 1); //fire(i){ this.reports.splice(i, 1);
+    }
+}
 
 
 
@@ -64,6 +92,38 @@ Everytime they fire an employee they get $100 added to their bonus.
 
 call your class ProgressiveManager
 */
+class ProgressiveManager extends Manager{
+    constructor(first_name,last_name,email, age,reports,title,bonus ){
+        super(first_name,last_name,email, age, reports)
+        this.title= 'Not a manager',
+        this.bonus= 0
+    }
+   hire(employee){
+       this.reports.push(employee);
+       var reports = this.reports.length;
+
+       if(reports === 0){
+           this.title = 'Not a manager';
+       }else if(reports >= 1 && reports <= 3){
+           this.title = 'Barely Manager';
+       }else if (reports >= 4 && reports <= 10){
+            this.title = 'Mostly Manager';
+       }else if (reports >= 11 & reports <= 50){
+           this.title = 'Manager';
+       }else if (reports >= 51 & reports <= 100){
+           this.title = 'Manager Plus';
+       }else if (reports >= 101){
+           this.title = 'Bestest Manager';
+       }
+
+   }
+   fire(employee){
+       this.reports.splice(employee, 1)
+       this.bonus += 100;
+
+   }
+}
+
 
 
 
@@ -90,3 +150,26 @@ It can :
       It should set decrease wear_and_tear_count by 10, and set needs_reboot to false
 
 */
+class Machine {
+    constructor() {
+        this.widgets_made_count = 0;
+        this.wear_and_tear_count = 0;
+        this.needs_reboot = false;
+    }
+
+    makeWidgets(number) {
+        this.widgets_made_count += number;
+        this.wear_and_tear_count += number / 50;
+    }
+
+    fixMachine() {
+        this.needs_reboot = true;
+    }
+
+    reboot() {
+        return () => {
+            this.wear_and_tear_count -= 10;
+            this.needs_reboot = false;
+        }
+    }
+}
